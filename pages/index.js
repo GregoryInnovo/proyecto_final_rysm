@@ -59,10 +59,10 @@ export default function Home() {
         <section className="o-enter-container">
           <div classnName="o-enter-content">
             <h1>Sesión de administrativo</h1>
-            <p className="o-enter-p">
+            {/* <p className="o-enter-p">
               Descubre como se encuentra su planta conociendo su temperatura,
               humedad y si necesita que se lleve de la bomba de agua.
-            </p>
+            </p> */}
             <button type="button">
               <a href="#miModal">Abrir Modal</a>
             </button>
@@ -70,10 +70,10 @@ export default function Home() {
         </section>
         <section class="o-enter-user">
           <h1>Sesión de usuarios</h1>
-          <p className="o-enter-p">
+          {/* <p className="o-enter-p">
             Descubre como se encuentra su planta conociendo su temperatura,
             humedad y si necesita que se lleve de la bomba de agua.
-          </p>
+          </p> */}
           <button type="button">
             <a href="#miModal">Abrir Modal</a>
           </button>
