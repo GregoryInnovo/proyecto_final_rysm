@@ -1,67 +1,51 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
-
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 export default function Home() {
-  const [id, setId] = useState("n/a");
-  const [tookMedicine, setTookMedicine] = useState("n/a");
-  const [lastValue, setLastValue] = useState("n/a");
-  const [nextTimeStamp, setNextTimeStamp] = useState("n/a");
+  const router = useRouter();
+  const userName = useRef(null);
+  const password = useRef(null);
 
-  useEffect(() => {
-    getId();
-    getMedicine();
-    getLastTimeStamp();
-    showNextTimeStamp();
-  }, []);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(userName.current.value);
+    console.log(password.current.value);
 
-  const getId = () => {
-    axios
-      .get(
-        "http://industrial.api.ubidots.com/api/v1.6/devices/nodo2/id/values?token=BBFF-RofFxL9UJKAx5ZQdTnMHEt8SSf1D8J"
-      )
-      .then((res) => {
-        console.log(res.data);
-        setId(res.data.results[0].value);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (
+      userName.current.value === "ADMIN" &&
+      password.current.value === "ADMIN"
+    ) {
+      console.log("Login Successful");
+      localStorage.setItem("admin", true);
+      router.push("/dashboard");
+    }
+    if (
+      userName.current.value === "USER1" &&
+      password.current.value === "111"
+    ) {
+      localStorage.setItem("user", 1);
+      localStorage.setItem("admin", false);
+      router.push("/user");
+    }
+    if (
+      userName.current.value === "USER2" &&
+      password.current.value === "222"
+    ) {
+      localStorage.setItem("user", 2);
+      localStorage.setItem("admin", false);
+      router.push("/user");
+    }
+    if (
+      userName.current.value === "USER3" &&
+      password.current.value === "333"
+    ) {
+      localStorage.setItem("user", 3);
+      localStorage.setItem("admin", false);
+      router.push("/user");
+    }
   };
-
-  const getMedicine = () => {
-    axios
-      .get(
-        "http://industrial.api.ubidots.com/api/v1.6/devices/nodo2/tookmedicine/values?token=BBFF-RofFxL9UJKAx5ZQdTnMHEt8SSf1D8J"
-      )
-      .then((res) => {
-        console.log(res.data);
-        setTookMedicine(res.data.results[0].value);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getLastTimeStamp = () => {
-    axios
-      .get("http://industrial.api.ubidots.com/api/v1.6/devices/nodo2/tookmedicine/values?token=BBFF-RofFxL9UJKAx5ZQdTnMHEt8SSf1D8J")
-      .then((res) => {
-        let date = new Date(res.data.results[0].timestamp);
-        setLastValue(date.toLocaleString());
-      })
-  }
-
-  const showNextTimeStamp = () => {
-    axios
-      .get("http://industrial.api.ubidots.com/api/v1.6/devices/nodo2/tookmedicine/values?token=BBFF-RofFxL9UJKAx5ZQdTnMHEt8SSf1D8J")
-      .then((res) => {
-        let date2 = new Date(res.data.results[0].timestamp + (3600*1000*24));
-        setNextTimeStamp(date2.toLocaleString());
-      })
-  }
 
   return (
     <div className={styles.container}>
@@ -71,46 +55,48 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Bienvenido a Smart Medicine</h1>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Tu ID es:</h2>
-            <p>{id}</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>¿El usuario tomó su pastilla?</h2>
-            <p>{tookMedicine == 1 ? "Sí" : "No"}</p>
-          </a>
-
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Su ultima medicina fue tomada el:</h2>
-            <p>{lastValue}</p>
-          </a>
-
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>La proxima medicina debe ser tomada el:</h2>
-            <p>{nextTimeStamp}</p>
-          </a>
-
-
-        </div>
+      <main>
+        <section className="o-enter-container">
+          <div classnName="o-enter-content">
+            <h1>Sesión de administrativo</h1>
+            <p className="o-enter-p">
+              Descubre como se encuentra su planta conociendo su temperatura,
+              humedad y si necesita que se lleve de la bomba de agua.
+            </p>
+            <button type="button">
+              <a href="#miModal">Abrir Modal</a>
+            </button>
+          </div>
+        </section>
+        <section class="o-enter-user">
+          <h1>Sesión de usuarios</h1>
+          <p className="o-enter-p">
+            Descubre como se encuentra su planta conociendo su temperatura,
+            humedad y si necesita que se lleve de la bomba de agua.
+          </p>
+          <button type="button">
+            <a href="#miModal">Abrir Modal</a>
+          </button>
+        </section>
       </main>
+      <div id="miModal" className="modal">
+        <div className="modal-contenido">
+          <a href="#">X</a>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+          <h1>Login</h1>
+          <form onSubmit={submitHandler}>
+            <label>
+              Username:
+              <input ref={userName} type="text" name="username" required />
+            </label>
+            <label>
+              Password:
+              <input ref={password} type="password" name="password" required />
+            </label>
+            <input type="submit" value="Login" />
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
